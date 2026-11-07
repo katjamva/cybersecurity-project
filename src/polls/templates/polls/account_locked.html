@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+{% block extra_head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+{% endblock %}
+<body>
+    <h1>Account locked</h1>
+    <p>Too many failed login attempts. Please try again later.</p>
+    <a href="{% url 'polls:index' %}">Back to main page</a>
+</body>
+</html>

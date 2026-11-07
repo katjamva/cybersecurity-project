@@ -1,0 +1,38 @@
+{% extends "polls/base.html" %}
+{% block extra_head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2>Register here</h2>
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% if success_message %}
+        <p>{{ success_message }} <a href="{% url 'login' %}">Log in</a></p>
+    {% endif %}
+    {% if validation_error_messages %}
+        <ul>
+        {% for message in validation_error_messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" value="{{ previous_username_input }}">
+        </p>
+        <p>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password">
+        </p>
+        <p>
+            <label for="password_confirmation">Confirm password:</label><br>
+            <input type="password" id="password_confirmation" name="password_confirmation">
+        </p>
+        <button type="submit">Register an account</button>
+    </form>
+{% endblock %}

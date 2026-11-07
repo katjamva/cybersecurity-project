@@ -1,0 +1,14 @@
+src/.env
+src/crack.py
+
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Database and logs (generated, not source)
+db.sqlite3
+src/security.log
+

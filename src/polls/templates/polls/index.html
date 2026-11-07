@@ -1,0 +1,55 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}</p>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+    <button type="submit">Log out</button>
+    </form>
+{% else %}
+    <a href="{% url 'login' %}">Log in</a> |
+    <a href="{% url 'polls:register' %}">Register</a>
+{% endif %}
+
+<form method="get" action="{% url 'polls:index' %}">
+    <label for="poll-search">Search polls:</label>
+    <input
+        type="search"
+        id="poll-search"
+        name="q"
+        value="{{ search_query }}"
+        placeholder="Search polls"
+    >
+    <button type="submit">Search</button>
+    {% if search_query %}
+        <a href="{% url 'polls:index' %}">Clear search</a>
+    {% endif %}
+</form>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'polls:create' %}">New poll</a>
+{% endif %}
+
+{% if latest_question_list %}
+    <ul>
+    {% for question in latest_question_list %}
+        <li>
+            <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
+            {% if question.owner == user %}
+                <a href="{% url 'polls:delete' question.id %}">[delete]</a>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% elif search_query %}
+    <p>No polls match "{{ search_query }}".</p>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+{% endblock %}
+
+{% block extra_head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+{% endblock %}

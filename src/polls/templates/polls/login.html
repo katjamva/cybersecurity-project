@@ -1,0 +1,15 @@
+{% extends "polls/base.html" %}
+{% block extra_head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+{% endblock %}
+{% block content %}
+    <h2>Log in</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Log in</button>
+    </form>
+    <p>Don't have an account? <a href="{% url 'polls:register' %}">Register here</a></p>
+    <p><a href="{% url 'polls:index' %}">Back to polls</a></p>
+{% endblock %}
