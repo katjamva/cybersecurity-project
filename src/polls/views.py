@@ -19,21 +19,22 @@ security_logger = logging.getLogger("security")
 
 # FLAW 5 (A09:2021 Security Logging and Monitoring Failures): login attempts
 # (successful and failed) are not logged, so there's no record of who
-# logged in, when, or from where, nor any trace of attacks in progress.
+# logged in, when, or from where.
 #
-# FIX 2/2: uncomment these two receivers to log login activity with IP address.
-@receiver(user_logged_in)
-def log_successful_login(sender, request, user, **kwargs):
-    security_logger.info(
-        "Successful login: user=%s ip=%s", user.username, request.META.get("REMOTE_ADDR"),
-    )
+# FIX 2/2: Uncomment these two receivers to log login activity with IP address.
+#
+# @receiver(user_logged_in)
+# def log_successful_login(sender, request, user, **kwargs):
+#     security_logger.info(
+#         "Successful login: user=%s ip=%s", user.username, request.META.get("REMOTE_ADDR"),
+#     )
 
-@receiver(user_login_failed)
-def log_failed_login(sender, credentials, request, **kwargs):
-    security_logger.warning(
-        "Failed login: username=%s ip=%s",
-        credentials.get("username"), request.META.get("REMOTE_ADDR"),
-    )
+# @receiver(user_login_failed)
+# def log_failed_login(sender, credentials, request, **kwargs):
+#     security_logger.warning(
+#         "Failed login: username=%s ip=%s",
+#         credentials.get("username"), request.META.get("REMOTE_ADDR"),
+#     )
 
 @login_required
 def delete_poll(request, question_id):
@@ -122,7 +123,7 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         self.search_query = self.request.GET.get("q", "").strip()
 
-        # Flaw 3 (A03:2021 Injection): user input from search is pasted
+        # FLAW 3 (A03:2021 Injection): user input from search is pasted
         # directly into a raw SQL string instead of being sent as a
         # parameter.
         sql = (
@@ -133,8 +134,11 @@ class IndexView(generic.ListView):
         questions = list(Question.objects.raw(sql))
         return questions if self.search_query else questions[:5]
 
-        # Fix: use the ORM, which sends user input to the database as a
+        # FIX: use the ORM, which sends user input to the database as a
         # parameter instead of concatenating it into the SQL string.
+        # Uncomment the lines below and comment out the SQL-based
+        # block above (from "sql = (" through the return statement).
+        #
         # questions = Question.objects.order_by("-pub_date")
         # if self.search_query:
         #     return questions.filter(question_text__icontains=self.search_query)

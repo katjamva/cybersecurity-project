@@ -62,30 +62,30 @@ LOGIN_REDIRECT_URL = "polls:index"
 # FIX 1/2: uncomment the lines below and login attempts
 # are now logged with a timestamp and IP address.
 #
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "security": {
-            "format": "{asctime} {levelname} {message}",
-            "style": "{",
-        },
-    },
-    "handlers": {
-        "file": {
-            "class": "logging.FileHandler",
-            "filename": BASE_DIR / "security.log",
-            "formatter": "security",
-        },
-    },
-    "loggers": {
-        "security": {
-            "handlers": ["file"],
-            "level": "INFO",
-            "propagate": False,
-        },
-    },
-}
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "formatters": {
+#         "security": {
+#             "format": "{asctime} {levelname} {message}",
+#             "style": "{",
+#         },
+#     },
+#     "handlers": {
+#         "file": {
+#             "class": "logging.FileHandler",
+#             "filename": BASE_DIR / "security.log",
+#             "formatter": "security",
+#         },
+#     },
+#     "loggers": {
+#         "security": {
+#             "handlers": ["file"],
+#             "level": "INFO",
+#             "propagate": False,
+#         },
+#     },
+# }
 
 
 TEMPLATES = [
@@ -121,7 +121,6 @@ DATABASES = {
 # FLAW 2 (A02:2021 Cryptographic Failures): passwords are hashed with MD5,
 # declared cryptographically broken in 2008 and should not be used for password hashing
 PASSWORD_HASHERS = [
-    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
     "django.contrib.auth.hashers.MD5PasswordHasher",
 ]
 
@@ -129,6 +128,7 @@ PASSWORD_HASHERS = [
 # PBKDF2 is first, so new passwords use it. MD5 is kept because otherwise users
 # registered under the flaw could not log in anymore. Now their hashes are 
 # automatically upgraded at login.
+#
 # PASSWORD_HASHERS = [
 #     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
 #     "django.contrib.auth.hashers.MD5PasswordHasher",
@@ -174,14 +174,16 @@ STATIC_URL = "static/"
 LOGIN_REDIRECT_URL = "polls:index"
 LOGOUT_REDIRECT_URL = "polls:index"
 
-#FLAW 4 (A07:2021 Identification and Authentication Failures): login attempts don't
-#have a limit, so brute-force attacks are possible because of unlimited login attempts
+# FLAW 4 (A07:2021 Identification and Authentication Failures): login attempts don't
+# have a limit, so brute-force attacks are possible because of unlimited login attempts.
 #
-#Fix: Uncomment the rows below. Axes is already installed.
+# FIX: Uncomment AUTHENTICATION_BACKENDS, AXES_FAILURE_LIMIT, AXES_COOLOFF_TIME,
+# AXES_LOCKOUT_TEMPLATE, and AXES_LOCKOUT_CALLABLE below to enable rate limiting. 
+# Axes is already installed.
 #
 #AUTHENTICATION_BACKENDS = [
 #   "axes.backends.AxesStandaloneBackend",
-#    "django.contrib.auth.backends.ModelBackend",
+#   "django.contrib.auth.backends.ModelBackend",
 #]
 
 #AXES_FAILURE_LIMIT = 5
