@@ -14,10 +14,11 @@ Screenshots of flaws before and after applying fixes:
 ## About
 
 Simple polls app with the following features:
-    * user registration and login
-    * users can create and delete polls
-    * anyone can view polls, vote on them and see the vote results
-    * search bar to search polls
+
+- User registration and login
+- Users can create and delete polls
+- Anyone can view polls, vote on them and see the vote results
+- Search bar to search polls
 
 
 ## Installation instructions
